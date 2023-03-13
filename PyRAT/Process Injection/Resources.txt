@@ -1,0 +1,1 @@
+https://www.apriorit.com/dev-blog/727-win-guide-to-hooking-windows-apis-with-python
