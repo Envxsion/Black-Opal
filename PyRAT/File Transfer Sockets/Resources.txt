@@ -1,0 +1,1 @@
+https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-python3/
