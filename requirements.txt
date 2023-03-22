@@ -1,0 +1,4 @@
+pyuac
+pypiwin32
+getpass
+keyboard

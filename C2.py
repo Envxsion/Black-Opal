@@ -178,10 +178,14 @@ def update():
         #check version with version.txt on github
         github_version = requests.get("https://raw.githubusercontent.com/BlackOpal/BlackOpal/master/version.txt").text
         if version < github_version:
-            print("[+] Updating...")
-            # update
-            os.system("git clone https://github.com/Envxsion/BlackOpal.git")
-            os.system("cd BlackOpal && git pull")
+            try:
+                print("[+] Updating...")
+                # update using http
+                os.system("git clone https://github.com/BlackOpal/BlackOpal.git")
+                os.system("cd BlackOpal && git pull")
+                print("[+] Updated sucessfully\n")
+            except:
+                print("[-] Failed to update\n")
             
         else:
             print("\n[+] BlackOpal already up to date")
@@ -265,7 +269,7 @@ def cli(arguments):
                     main()
             # BlackOpal manual
             elif option == "man" or option == "manual":
-                os.system(f"xdg-open https://github.com/CosmodiumCS/BlackOpal/blob/main/payloads/manual.md")
+                os.system(f"start msedge https://envxsion.gitbook.io/black-opal/")
             # remove installation
             elif option == "remove" or option == "uninstall":
                 remove()
