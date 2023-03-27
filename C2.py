@@ -100,27 +100,27 @@ def connect(address, password, port):
 
     os.system(f"sshpass -p \"{password}\" ssh BlackOpal@{address} -p {port}")
 
-# remote uploads with SCP
-def remote_upload(address, password, upload, path, port):
+def start_listener(ip, port):
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((ip, port))
+    server_socket.listen()
+    print(f"Listening on {ip}:{port}")
+    conn, addr = server_socket.accept()
+    print(f"Accepted connection from {addr}")
+    return conn
 
-    print("\n[*] Starting Upload...")
+def upload(conn, file_path):
+    with open(file_path, "rb") as f:
+        file_data = f.read()
+    conn.sendall(file_data)
 
-    # scp upload
-    os.system(f"sshpass -p \"{password}\" scp -P {port} -r {upload} BlackOpal@{address}:{path}")
-
-    print("[+] Upload complete\n")
-
-# remote download with SCP
-def remote_download(address, password, path, port):
-
-    print("\n[*] Starting Download...")
-
-    # scp download
-    os.system("mkdir ~/Downloads")
-
-    os.system(f"sshpass -p \"{password}\" scp -P {port} BlackOpal@{address}:{path} ~/Downloads")
-
-    print("[+] Download saved to \"~/Downloads\"\n")
+def download(conn, file_path):
+    with open(file_path, "wb") as f:
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            f.write(data)
 
 # run commands remotely with SCP
 def remote_command(address, password, command, port):
