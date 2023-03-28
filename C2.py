@@ -100,27 +100,27 @@ def connect(address, password, port):
 
     os.system(f"sshpass -p \"{password}\" ssh BlackOpal@{address} -p {port}")
 
-# remote uploads with SCP
-def remote_upload(address, password, upload, path, port):
+def start_listener(ip, port):
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((ip, port))
+    server_socket.listen()
+    print(f"Listening on {ip}:{port}")
+    conn, addr = server_socket.accept()
+    print(f"Accepted connection from {addr}")
+    return conn
 
-    print("\n[*] Starting Upload...")
+def upload(conn, file_path):
+    with open(file_path, "rb") as f:
+        file_data = f.read()
+    conn.sendall(file_data)
 
-    # scp upload
-    os.system(f"sshpass -p \"{password}\" scp -P {port} -r {upload} BlackOpal@{address}:{path}")
-
-    print("[+] Upload complete\n")
-
-# remote download with SCP
-def remote_download(address, password, path, port):
-
-    print("\n[*] Starting Download...")
-
-    # scp download
-    os.system("mkdir ~/Downloads")
-
-    os.system(f"sshpass -p \"{password}\" scp -P {port} BlackOpal@{address}:{path} ~/Downloads")
-
-    print("[+] Download saved to \"~/Downloads\"\n")
+def download(conn, file_path):
+    with open(file_path, "wb") as f:
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            f.write(data)
 
 # run commands remotely with SCP
 def remote_command(address, password, command, port):
@@ -178,10 +178,14 @@ def update():
         #check version with version.txt on github
         github_version = requests.get("https://raw.githubusercontent.com/BlackOpal/BlackOpal/master/version.txt").text
         if version < github_version:
-            print("[+] Updating...")
-            # update
-            os.system("git clone https://github.com/Envxsion/BlackOpal.git")
-            os.system("cd BlackOpal && git pull")
+            try:
+                print("[+] Updating...")
+                # update using http
+                os.system("git clone https://github.com/BlackOpal/BlackOpal.git")
+                os.system("cd BlackOpal && git pull")
+                print("[+] Updated sucessfully\n")
+            except:
+                print("[-] Failed to update\n")
             
         else:
             print("\n[+] BlackOpal already up to date")
@@ -265,7 +269,7 @@ def cli(arguments):
                     main()
             # BlackOpal manual
             elif option == "man" or option == "manual":
-                os.system(f"xdg-open https://github.com/CosmodiumCS/BlackOpal/blob/main/payloads/manual.md")
+                os.system(f"start msedge https://envxsion.gitbook.io/black-opal/")
             # remove installation
             elif option == "remove" or option == "uninstall":
                 remove()
