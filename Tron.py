@@ -2,12 +2,19 @@ import os
 import sys
 import time
 import pyautogui
+import subprocess
 from multiprocessing import Process
 from pyuac import main_requires_admin #add pyuac and pypiwin32 to requirements.txt
 
 def priv_escaltion():
     #run exe file from path
     os.system("SysinternalsSuite\PsExec.exe -s powershell.exe")
+    
+
+#def priv_escaltion():
+#    #run exe file from path
+#    subprocess.call(['SysinternalsSuite\PsExec.exe', '-s', 'powershell.exe'])
+
 
 
 def commands():
