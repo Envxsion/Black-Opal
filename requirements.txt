@@ -3,3 +3,6 @@ pypiwin32
 getpass
 keyboard
 pillow
+pyngrok
+paramiko
+pyngrok
