@@ -1,7 +1,7 @@
 import requests
 
 # Replace this with the ngrok tunnel URL
-ngrok_url = "https://abcd1234.ngrok.io"
+ngrok_url = "https://abcd1234.ngrok.io" #I manually have to replace this since I don't have an ngrok subscription
 
 def make_file(file_name):
     """

