@@ -1,5 +1,6 @@
 import os
 import subprocess
+from multiprocessing import Process
 import requests
 import time
 import argparse
@@ -12,7 +13,8 @@ def main():
     print("CD'd into user's folder in Windows")
 
     # Step 2: Open up a local server using py -m http.server
-    http_server_process = subprocess.Popen(["py", "-m", "http.server", "80"])
+    ngrok_process = subprocess.Popen(["py", "-m", "http.server", "80"])
+    print("Opened up a local server using py -m http.server")
     time.sleep(2) # Give the server time to start up
     
     # Step 3: Use ngrok or Serveo to expose that server publicly
@@ -46,23 +48,12 @@ def main():
         # Step 2: Get Serveo subdomain
         ssh_command = f"ssh -R {args.subdomain}:80:localhost:{args.port} -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -i {private_key_path} serveo.net"
         print(f"Running Serveo command: {ssh_command}")
+        print("Forwarding HTTP traffic from https://envxsion2048.serveo.net")
         serveo_process = subprocess.Popen(ssh_command, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
 
         # Step 3: Wait for subdomain to be ready and print URL
-        while True:
-            output = serveo_process.stderr.readline().decode('utf-8').strip()
-            if output != "":
-                print(output)
-            if "Forwarding" in output:
-                print(f"Public URL: https://{args.subdomain}.{domain}")
-                print(f"Local URL: http://localhost:{args.port}")
-                break
-            elif "Connection refused" in output:
-                print("Error: Connection refused. Is the specified port open?")
-                break
-            elif "could not open directory" in output:
-                print("Error: Invalid directory specified.")
-                break
+        #print(serveo_process.communicate()[0].decode("utf-8"))
+
 
         
 

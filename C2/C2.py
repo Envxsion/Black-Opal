@@ -2,7 +2,7 @@ import requests
 
 # Replace this with the ngrok tunnel URL
 ngrok_url = "https://abcd1234.ngrok.io" #I manually have to replace this since I don't have an ngrok subscription
-
+serveo_url = "https://envxsion2048.serveo.net" #Or I can just use serveo
 def make_file(file_name):
     """
     Create a file with the given file name on the server
