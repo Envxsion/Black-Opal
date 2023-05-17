@@ -13,7 +13,7 @@ def main():
     print("CD'd into user's folder in Windows")
 
     # Step 2: Open up a local server using py -m http.server
-    ngrok_process = subprocess.Popen(["py", "-m", "http.server", "80"])
+    #local_process = subprocess.Popen(["py", "-m", "http.server", "80"])
     print("Opened up a local server using py -m http.server")
     time.sleep(2) # Give the server time to start up
     
@@ -25,14 +25,14 @@ def main():
     args = parser.parse_args()
 
     if args.tunnel == 'ngrok':
-        ngrok_process = subprocess.Popen(["C:/Users/cyn0v/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "80"])
+        ngrok_process = subprocess.Popen(["C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "80"])
         time.sleep(2) # Give ngrok time to start up
         ngrok_url = requests.get("http://localhost:4040/api/tunnels").json()["tunnels"][0]["public_url"]
         print(f"Public URL: {ngrok_url}")
 
     elif args.tunnel == 'serveo':
         # Step 1: Check if ssh key exists, if not create one
-        ssh_folder = 'C:/Users/cyn0v/Documents/GitHub/Black-Opal/ssh/'
+        ssh_folder = 'C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/ssh/'
         if not os.path.exists(ssh_folder):
             os.makedirs(ssh_folder)
 
@@ -46,13 +46,12 @@ def main():
 
         domain = "serveo.net"
         # Step 2: Get Serveo subdomain
-        ssh_command = f"ssh -R {args.subdomain}:80:localhost:{args.port} -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -i {private_key_path} serveo.net"
+        ssh_command = f"ssh -R {args.subdomain}:80:localhost:{args.port} -i {private_key_path} serveo.net"
         print(f"Running Serveo command: {ssh_command}")
         print("Forwarding HTTP traffic from https://envxsion2048.serveo.net")
         serveo_process = subprocess.Popen(ssh_command, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
-
         # Step 3: Wait for subdomain to be ready and print URL
-        #print(serveo_process.communicate()[0].decode("utf-8"))
+        print(serveo_process.communicate()[0].decode("utf-8"))
 
 
         
