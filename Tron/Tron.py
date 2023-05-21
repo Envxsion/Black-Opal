@@ -8,12 +8,15 @@ from pyuac import main_requires_admin
 
 @main_requires_admin
 def main():
+    # Step 0: Save the default path
+    default_path = os.getcwd()
+    print(default_path)
     # Step 1: cd into user's folder in Windows
     os.chdir(os.path.expanduser("~"))
     print("CD'd into user's folder in Windows")
 
     # Step 2: Open up a local server using py -m http.server
-    #local_process = subprocess.Popen(["py", "-m", "http.server", "80"])
+    local_process = subprocess.Popen(["py", "-m", "http.server", "80"])
     print("Opened up a local server using py -m http.server")
     time.sleep(2) # Give the server time to start up
     
@@ -24,15 +27,17 @@ def main():
     parser.add_argument('-p', dest='port', required=True, help='port for connection')
     args = parser.parse_args()
 
+    #save default paths to resources
+    ngrok_path = os.path.join(default_path, "Resources", "ngrok.exe")
+    ssh_folder = os.path.join(default_path, "ssh")
     if args.tunnel == 'ngrok':
-        ngrok_process = subprocess.Popen(["C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "80"])
+        ngrok_process = subprocess.Popen([ngrok_path, "http", "80"])
         time.sleep(2) # Give ngrok time to start up
         ngrok_url = requests.get("http://localhost:4040/api/tunnels").json()["tunnels"][0]["public_url"]
         print(f"Public URL: {ngrok_url}")
 
     elif args.tunnel == 'serveo':
         # Step 1: Check if ssh key exists, if not create one
-        ssh_folder = 'C:/Users/cyn0v/OneDrive/Documents/GitHub/Black-Opal/ssh/'
         if not os.path.exists(ssh_folder):
             os.makedirs(ssh_folder)
 
