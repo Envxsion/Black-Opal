@@ -1,46 +1,72 @@
 import requests
 
-# Replace this with the ngrok tunnel URL
-ngrok_url = "https://abcd1234.ngrok.io" #I manually have to replace this since I don't have an ngrok subscription
-serveo_url = "https://envxsion2048.serveo.net" #Or I can just use serveo
-def make_file(file_name):
-    """
-    Create a file with the given file name on the server
-    """
-    response = requests.post(f"{serveo_url}/make/{file_name}")
-    if response.status_code != 200:
-        print(f"Error creating file: {response.text}")
+# Replace the URL with the public URL of your Tron.py server
+url = "http://envxsion2048.serveo.net"
 
-def delete_file(file_name):
-    """
-    Delete the file with the given file name from the server
-    """
-    response = requests.post(f"{serveo_url}/delete/{file_name}")
-    if response.status_code != 200:
-        print(f"Error deleting file: {response.text}")
+def download_file(url,file_path):
+    # Download the file from the server
+    url = f"{url}/{file_path}"
+    response = requests.get(url)
 
-def upload_file(local_file_path, remote_file_path):
-    """
-    Upload a local file to the given remote file path on the server
-    """
-    files = {"file": open(local_file_path, "rb")}
-    response = requests.post(f"{serveo_url}/upload/{remote_file_path}", files=files)
-    if response.status_code != 200:
-        print(f"Error uploading file: {response.text}")
-
-def download_file(remote_file_path, local_file_path):
-    """
-    Download a remote file to the given local file path from the server
-    """
-    response = requests.get(f"{serveo_url}/download/{remote_file_path}")
-    with open(local_file_path, "wb") as f:
+    # Save the file to disk
+    with open(file_path, "wb") as f:
         f.write(response.content)
 
-def wait_for_command():
-    """
-    Wait for a command from the server
-    """
-    while True:
-        response = requests.get(f"{serveo_url}/command")
-        if response.status_code == 200:
-            return response.text
+def upload_file(url, file_path):
+    # Upload the file to the server
+    url = url + "/upload/" + file_path
+    with open(file_path, "rb") as f:
+        response = requests.post(url, files={"file": f})
+
+def make_file(file_path):
+    # Create a new file on the server
+    url = url + "make " + file_path
+    response = requests.put(url)
+
+def delete_file(file_path):
+    # Delete a file on the server
+    url = url + "delete " + file_path
+    response = requests.delete(url)
+
+while True:
+    # Get user input
+    command = input("Enter command: ")
+
+    # Check if the command is a download request
+    if command.startswith("download "):
+        # Extract the file path from the command
+        file_path = command.split(" ")[1]
+
+        # Download the file from the server
+        download_file(url,file_path)
+
+    # Check if the command is an upload request
+    elif command.startswith("upload "):
+        # Extract the file path from the command
+        file_path = command.split(" ")[1]
+
+        # Upload the file to the server
+        upload_file(url,file_path)
+
+    # Check if the command is a make file request
+    elif command.startswith("make "):
+        # Extract the file path from the command
+        file_path = command.split(" ")[1]
+
+        # Create a new file on the server
+        make_file(url,file_path)
+
+    # Check if the command is a delete file request
+    elif command.startswith("delete "):
+        # Extract the file path from the command
+        file_path = command.split(" ")[1]
+
+        # Delete a file on the server
+        delete_file(url,file_path)
+
+    else:
+        # Send the command to Tron.py
+        response = requests.post(url, data=command)
+
+        # Print Tron.py's output
+        print(response.text)
