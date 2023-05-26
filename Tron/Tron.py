@@ -6,7 +6,7 @@ import time
 import argparse
 from pyuac import main_requires_admin
 
-@main_requires_admin
+@main_requires_admin(return_output=True)
 def main():
     # Step 0: Save the default path
     default_path = os.getcwd()
@@ -74,6 +74,7 @@ def main():
     def download_file(file_path, file_name):
         # Download the file from the server
         url = f"http://localhost/{file_path}"
+        print(url)
         response = requests.get(url)
         with open(file_name, "wb") as f:
             f.write(response.content)
@@ -102,7 +103,6 @@ def main():
         if command.startswith("download "):
             # Extract the file path from the command
             file_path = command.split(" ")[1]
-
             # Download the file from the server
             download_file(file_path, file_path.split("/")[-1])
 
@@ -136,3 +136,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    admin_stdout_str, admin_stderr_str, *_ = rv = main()
