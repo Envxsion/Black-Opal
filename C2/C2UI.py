@@ -1,98 +1,94 @@
-# import necessary modules
-from tkinter import *
-from tkinter.ttk import Progressbar, Combobox, Notebook, Treeview
-from PIL import Image, ImageTk
-import tkinter.font
-import tkinter.messagebox
-import customtkinter
+import customtkinter as ctk
+from PIL import Image, ImageTk, ImageChops
+from CTkMessagebox import CTkMessagebox
+
+app = ctk.CTk()
+app.title("Black Opal Log In")
+app.geometry("1264x800")
+
+def show_pass():
+    if keyent.cget('show') == '*':
+        keyent.configure(show='')
+        showpas.configure(image=open_eye)
+    else:
+        keyent.configure(show='*')
+        showpas.configure(image=closed_eye)
+
+def show_man_page():
+    tabview.set("Man Page")
 
 def login():
-    #login logic import
-    auth_successful = True
-    if auth_successful:
-        print("W")
-        loading.stop()
-        loading.destroy()
-        login_button.configure(state="normal")
-        if LoginTab.index("end") >= 2:  # check if there are at least 3 tabs
-            ta2_state = "normal"  # enable C2 tab
-            ta3_state = "normal"  # enable Man Page tab
-            LoginTab.tab(0, state=ta2_state)
-            LoginTab.tab(1, state=ta3_state)
-        return "Auth Successful"
+    username = userent.get()
+    password = keyent.get()
+    if username == "Ojas":
+        if password == "blackopal":
+            CTkMessagebox(title='Log in successful', message= 'Hello Ojas')
+            # Show C2 tab
+            c2_tab.pack()
+            # Switch to C2 tab
+            tabview.set("C2")
+        else:
+            CTkMessagebox(title="ERROR",message="USER AND KEY ARE INCORRECT OR USER DOESNT EXIST", icon="cancel")
     else:
-        loading.stop()
-        loading.destroy()
-        login_button.configure(state="normal")
-        return "Auth Failed"
+        CTkMessagebox(title="ERROR",message="USER AND KEY ARE INCORRECT OR USER DOESNT EXIST", icon="cancel")
+
+def themed():
+    if themeswitch.get() == 0:
+        ctk.set_appearance_mode("Dark")
+        themeswitch.configure(text="🌙")
+    if themeswitch.get() == 1:
+        ctk.set_appearance_mode("Light")
+        themeswitch.configure(text="☀️")
 
 
-# set appearance mode and default color theme for customtkinter
-customtkinter.set_appearance_mode("Dark")
-customtkinter.set_default_color_theme("dark-blue")
+# Create tab view
+tabview = ctk.CTkTabview(app)
+tabview.pack(padx=0, pady=0,expand=1, fill="both")
 
-# create main window
-w1 = Tk()
-w1.configure(bg='#000000')
-w1.geometry('1270x800')
-w1.title("BlackOpal")
+# Create Login tab
+login_tab = tabview.add("Login")
 
-# create notebook for tabs
-LoginTab = Notebook(w1)
-LoginTab.place(x=0, y=0, width=1270, height=800)
 
-# create login tab
-ta1 = Frame(LoginTab)
-ta1.place(x=0, y=0, width=1266, height=771)
+banner = ctk.CTkCanvas(login_tab, width=750, height=350)
+banner.place(x=250, y=-4)
+banneri = Image.open("Banner.png")
+bannerimg = ImageChops.offset(banneri, -80, 0)
+bannerimg = ImageTk.PhotoImage(bannerimg)
+banner.create_image(490, 150, image=bannerimg)
 
-# create banner
-banner = customtkinter.CTkCanvas(ta1, bg='white', width=1270, height=250)
-banner.place(x=-2, y=-4)
-banneri = Image.open("C:/Users/cyn0v/Desktop/pfp/banner.png")
-bannerimg = ImageTk.PhotoImage(banneri.resize((1270, 250)))
-banner.create_image(0, 0, image=bannerimg, anchor=NW)
+userlbl = ctk.CTkLabel(login_tab, text="USR:",font=("Arial",20,"bold"))
+userlbl.place(x=500,y=400)
 
-# create question button
-help_img = customtkinter.CTkImage(Image.open("C:/Users/cyn0v/Desktop/pfp/question everything.png"), size=(20, 20))
-help_button = customtkinter.CTkButton(ta1, text="", fg_color="#13262d", font=("Calibri", 9), cursor="arrow", state="normal", image=help_img, compound="top", width=20, height=20)
-help_button.place(x=1230, y=-2)
+userent = ctk.CTkEntry(login_tab, placeholder_text="AAA0001",font=("Arial",20,"bold"))
+userent.place(x=580,y=400)
+keylbl = ctk.CTkLabel(login_tab, text="KEY:",font=("Arial",20,"bold"))
+keylbl.place(x=500,y=450)
 
-# create username and key entries
-usr_entry = customtkinter.CTkEntry(ta1, text_color="#976bef", font=("Dubai", 20), state="normal", width=150, height=32)
-usr_entry.place(x=610, y=356)
-key_entry = customtkinter.CTkEntry(ta1, text_color="#976bef", font=("Dubai", 20), state="normal", width=150, height=32)
-key_entry.place(x=610, y=410)
+keyent = ctk.CTkEntry(login_tab, show="*", placeholder_text="********",font=("Arial",20,"bold"))
+keyent.place(x=580,y=450)
+keyent.bind("<Return>", lambda e: login())
 
-# create username and key labels
-key_lbl = customtkinter.CTkLabel(ta1, text="KEY:", anchor='w', text_color="#05c0a1", font=("digital display tfb", 28), cursor="arrow", state="normal", width=80, height=32)
-key_lbl.place(x=530, y=410)
-usr_lbl = customtkinter.CTkLabel(ta1, text="USR:", anchor='w', text_color="#05c0a1", font=("digital display tfb", 28), cursor="arrow", state="normal", width=80, height=32)
-usr_lbl.place(x=530, y=356)
+loginbtn = ctk.CTkButton(login_tab, text="Login",font=("Arial",20,"bold"),command=login)
+loginbtn.place(x=550,y=530)
 
-# create loading bar
-loading = customtkinter.CTkProgressBar(ta1, cursor="arrow", width=230, height=10)
-loading.place(x=528, y=446)
-loading['value'] = 0
+open_eye = ctk.CTkImage(Image.open("eye_open.png"))
+closed_eye = ctk.CTkImage(Image.open("eye_closed.png"))
+showpas = ctk.CTkButton(master=login_tab,text="",width=1,image=closed_eye, command=show_pass)
+showpas.place(x=730,y=452)
 
-# create login button
-login_button = customtkinter.CTkButton(ta1, text="Login", fg_color="#5bc0d2", text_color="#000000", font=("digital display tfb", 28), cursor="arrow", state="normal", width=230, height=42, command=login)
-login_button.place(x=528, y=476)
+# Create Man Page tab
+man_page_tab = tabview.add("Man Page")
+man_page_tab.pack_forget()
 
-# create C2 tab
-ta2 = Frame(LoginTab)
-ta2.place(x=0, y=0, width=1266, height=771)
-ta2_state = "disabled"  # set initial state to disabled
+info = ctk.CTkImage(Image.open("info_help_icon.png"))
+helpbtn = ctk.CTkButton(master=login_tab,text="",width=20,image=info, command=show_man_page, compound="top", fg_color="#18445a",bg_color="#18445a")
+helpbtn.place(x=1208,y=10)
 
-# add C2 tab to notebook
-LoginTab.add(ta2, text="C2 | BlackOpal", state=ta2_state)
+# Create C2 tab
+c2_tab = tabview.add("C2")
+c2_tab.pack_forget()
 
-# create Man Page tab
-ta3 = Frame(LoginTab)
-ta3.place(x=0, y=0, width=1266, height=771)
-ta3_state = "disabled"  # set initial state to disabled
+themeswitch = ctk.CTkSwitch(app,text="🌙",command=themed)
+themeswitch.place(x=10,y=770)
 
-# add Man Page tab to notebook
-LoginTab.add(ta3, text="Man Page | BlackOpal", state=ta3_state)
-
-# run main window
-w1.mainloop()
+app.mainloop()
