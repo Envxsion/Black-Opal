@@ -22,9 +22,7 @@ def login():
     password = keyent.get()
     if username == "KEK0001":
         if password == "blackopal":
-            CTkMessagebox(title='Log in successful', message= 'Hello Ojas', command=show_man_page)
-            # Show C2 tab
-            c2_tab.pack()
+            CTkMessagebox(title='Log in successful', message= 'Hello Ojas')
             # Switch to C2 tab
             tabview.set("C2")
         else:
@@ -78,16 +76,24 @@ showpas.place(x=730,y=452)
 
 # Create Man Page tab
 man_page_tab = tabview.add("Man Page")
-man_page_tab.pack_forget()
+
 
 info = ctk.CTkImage(Image.open("info_help_icon.png"))
 helpbtn = ctk.CTkButton(master=login_tab,text="",width=20,image=info, command=show_man_page, compound="top", fg_color="#18445a",bg_color="#18445a")
 helpbtn.place(x=1208,y=10)
 
-# Create C2 tab
-c2_tab = tabview.add("C2")
-c2_tab.pack_forget()
-c2_tab.configure("disabled")
+
+
+# Check if user is logged in
+if tabview.get() == "C2" and userent.get() != "KEK0001":
+    print("test")
+    CTkMessagebox(title="ERROR", message="Please log in first", icon="cancel")
+    tabview.set("Login")
+else:
+    # Create C2 tab
+    c2_tab = tabview.add("C2")
+    
+
 
 themeswitch = ctk.CTkSwitch(app,text="🌙",command=themed)
 themeswitch.place(x=10,y=770)
