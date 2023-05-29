@@ -5,7 +5,7 @@ from CTkMessagebox import CTkMessagebox
 app = ctk.CTk()
 app.title("Black Opal Log In")
 app.geometry("1264x800")
-
+ctk.deactivate_automatic_dpi_awareness()
 def show_pass():
     if keyent.cget('show') == '*':
         keyent.configure(show='')
@@ -20,9 +20,9 @@ def show_man_page():
 def login():
     username = userent.get()
     password = keyent.get()
-    if username == "Ojas":
+    if username == "KEK0001":
         if password == "blackopal":
-            CTkMessagebox(title='Log in successful', message= 'Hello Ojas')
+            CTkMessagebox(title='Log in successful', message= 'Hello Ojas', command=show_man_page)
             # Show C2 tab
             c2_tab.pack()
             # Switch to C2 tab
@@ -87,6 +87,7 @@ helpbtn.place(x=1208,y=10)
 # Create C2 tab
 c2_tab = tabview.add("C2")
 c2_tab.pack_forget()
+c2_tab.configure("disabled")
 
 themeswitch = ctk.CTkSwitch(app,text="🌙",command=themed)
 themeswitch.place(x=10,y=770)
