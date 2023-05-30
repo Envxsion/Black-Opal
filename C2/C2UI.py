@@ -1,3 +1,4 @@
+import csv
 import customtkinter as ctk
 from PIL import Image, ImageTk, ImageChops
 from CTkMessagebox import CTkMessagebox
@@ -6,6 +7,14 @@ app = ctk.CTk()
 app.title("Black Opal Log In")
 app.geometry("1264x800")
 ctk.deactivate_automatic_dpi_awareness()
+
+
+
+def c2_tab_generate():
+    # Create C2 tab
+    c2_tab = tabview.add("C2")
+    # Switch to C2 tab
+    tabview.set("C2")
 def show_pass():
     if keyent.cget('show') == '*':
         keyent.configure(show='')
@@ -17,19 +26,40 @@ def show_pass():
 def show_man_page():
     tabview.set("Man Page")
 
-def login():
-    username = userent.get()
-    password = keyent.get()
-    if username == "KEK0001":
-        if password == "blackopal":
-            CTkMessagebox(title='Log in successful', message= 'Hello Ojas')
-            # Switch to C2 tab
-            tabview.set("C2")
-        else:
-            CTkMessagebox(title="ERROR",message="USER AND KEY ARE INCORRECT OR USER DOESNT EXIST", icon="cancel")
-    else:
-        CTkMessagebox(title="ERROR",message="USER AND KEY ARE INCORRECT OR USER DOESNT EXIST", icon="cancel")
 
+def binary_search(arr, x):
+    # Returns index of x in arr if present, else -1
+    l = 0
+    r = len(arr) - 1
+    while l <= r:
+        mid = l + (r - l) // 2
+        if arr[mid][0] == x:
+            return mid
+        elif arr[mid][0] < x:
+            l = mid + 1
+        else:
+            r = mid - 1
+    return -1
+
+def login():
+    usr = userent.get()
+    key = keyent.get()
+
+    # Check if username and password are in datastore.csv using binary search
+    with open('datastore.csv', mode='r') as file:
+        reader = csv.reader(file)
+        rows = sorted(list(reader), key=lambda x: x[0])
+        index = binary_search(rows, usr)
+        if index != -1:
+            if rows[index][1] == key:
+                CTkMessagebox(title='Log in successful', message= f'Hello {usr}')
+                c2_tab_generate()
+                return
+            else:
+                CTkMessagebox(title="ERROR",message="Key is incorrect!", icon="cancel")
+        else:
+            # If username and password are not found in datastore.csv
+            CTkMessagebox(title="ERROR",message="You are not authorised to log in!", icon="cancel")
 def themed():
     if themeswitch.get() == 0:
         ctk.set_appearance_mode("Dark")
@@ -49,7 +79,7 @@ login_tab = tabview.add("Login")
 
 banner = ctk.CTkCanvas(login_tab, width=750, height=350)
 banner.place(x=250, y=-4)
-banneri = Image.open("Banner.png")
+banneri = Image.open("Resources/Banner.png")
 bannerimg = ImageChops.offset(banneri, -80, 0)
 bannerimg = ImageTk.PhotoImage(bannerimg)
 banner.create_image(490, 150, image=bannerimg)
@@ -69,33 +99,41 @@ keyent.bind("<Return>", lambda e: login())
 loginbtn = ctk.CTkButton(login_tab, text="Login",font=("Arial",20,"bold"),command=login)
 loginbtn.place(x=550,y=530)
 
-open_eye = ctk.CTkImage(Image.open("eye_open.png"))
-closed_eye = ctk.CTkImage(Image.open("eye_closed.png"))
+open_eye = ctk.CTkImage(Image.open("Resources/eye_open.png"))
+closed_eye = ctk.CTkImage(Image.open("Resources/eye_closed.png"))
 showpas = ctk.CTkButton(master=login_tab,text="",width=1,image=closed_eye, command=show_pass)
 showpas.place(x=730,y=452)
 
 # Create Man Page tab
 man_page_tab = tabview.add("Man Page")
 
-
-info = ctk.CTkImage(Image.open("info_help_icon.png"))
+# Help Icon
+info = ctk.CTkImage(Image.open("Resources/info_help_icon.png"))
 helpbtn = ctk.CTkButton(master=login_tab,text="",width=20,image=info, command=show_man_page, compound="top", fg_color="#18445a",bg_color="#18445a")
-helpbtn.place(x=1208,y=10)
+helpbtn.place(x=banner.winfo_x() + banner.winfo_width() - helpbtn.winfo_width(), y=10)
 
+# Create C2 tab
+#c2_tab = tabview.add("C2")
 
 
 # Check if user is logged in
-if tabview.get() == "C2" and userent.get() != "KEK0001":
-    print("test")
-    CTkMessagebox(title="ERROR", message="Please log in first", icon="cancel")
-    tabview.set("Login")
-else:
-    # Create C2 tab
-    c2_tab = tabview.add("C2")
-    
-
+# Doesnt work, tabs don't have states (normal and disabled)
+#if tabview.get() == "C2" and userent.get() != "KEK0001":
+#    print(tabview.get())
+#    print(userent.get())
+#    print("test")
+#    CTkMessagebox(title="ERROR", message="Please log in first", icon="cancel")
+#    tabview.set("Login")
+#else:
+#    print(tabview.get())
+#    print(userent.get())
 
 themeswitch = ctk.CTkSwitch(app,text="🌙",command=themed)
 themeswitch.place(x=10,y=770)
 
-app.mainloop()
+app.mainloop()         
+ 
+    
+
+
+
