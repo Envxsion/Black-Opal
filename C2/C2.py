@@ -1,3 +1,7 @@
+#python c:\Users\cyn0v\Documents\GitHub\Black-Opal\Tron\Tron.py --tunnel serveo --subdomain envxsion2048 -p 80
+
+
+
 import requests
 
 # Replace the URL with the public URL of your Tron.py server
