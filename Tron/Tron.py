@@ -136,4 +136,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    admin_stdout_str, admin_stderr_str, *_ = rv = main()

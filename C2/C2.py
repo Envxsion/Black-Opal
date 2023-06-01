@@ -5,7 +5,7 @@
 import requests
 
 # Replace the URL with the public URL of your Tron.py server
-url = "http://envxsion2048.serveo.net"
+url = "https://cbe2-121-200-4-145.ngrok-free.app"
 
 def download_file(url,file_path):
     # Download the file from the server
@@ -20,7 +20,7 @@ def upload_file(url, file_path):
     # Upload the file to the server
     url = url + "/upload/" + file_path
     with open(file_path, "rb") as f:
-        response = requests.post(url, files={"file": f})
+        response = requests.put(url, data=f.read())
 
 def make_file(file_path):
     # Create a new file on the server
