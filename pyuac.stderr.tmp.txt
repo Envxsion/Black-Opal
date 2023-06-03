@@ -1,0 +1,307 @@
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.1.171:8000
+Press CTRL+C to quit
+127.0.0.1 - - [03/Jun/2023 21:14:17] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [03/Jun/2023 21:14:26] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [03/Jun/2023 21:14:27] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:56] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:57] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:58] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:14:59] "POST /send HTTP/1.1" 200 -
+127.0.0.1 - - [03/Jun/2023 21:15:06] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:06,873] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:06] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:06] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:06,952] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:06] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:06] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,018] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,081] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,139] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,200] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,259] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,323] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,379] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 200 -
+[2023-06-03 21:15:07,457] ERROR in app: Exception on /receive [GET]
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\cyn0v\Documents\GitHub\Black-Opal\Sockets Test\server_folder\server.py", line 74, in receive_message
+    return jsonify({'message': response.json()["message"]})
+                               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'message'
+127.0.0.1 - - [03/Jun/2023 21:15:07] "GET /receive HTTP/1.1" 500 -

