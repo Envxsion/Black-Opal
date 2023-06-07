@@ -13,6 +13,8 @@ import os
 import time
 from pyuac import main_requires_admin
 from flask import Flask, request, jsonify
+from io import BytesIO
+from gzip import compress, decompress
 
 app = Flask(__name__)
 
@@ -20,15 +22,17 @@ SERVER_ADDRESS = None  # Define SERVER_ADDRESS as a global variable
 
 class Server:
     client_connections = []
-    def client_connections(self):
+
+    def accept_connections(self):
         """
         Accepts new client connections and adds them to the client list
         """
         while True:
-            client, address = self.server.accept()
+            client, address = self.server_socket.accept()
             config.log(f"Accepted a connection from {address[0]}:{address[1]}")
             self.client_connections.append(client)
 
+    @app.route('/new_client', methods=['POST'])
     @app.route('/new_client', methods=['POST'])
     def new_client():
         """
@@ -36,43 +40,33 @@ class Server:
         """
         client_data = request.json
         exist = False
-        for client in config.client_list:
-            if client['ip'] == client_data['ip']:
+        for client in Server.client_connections:
+            if client.getpeername()[0] == client_data['ip']:
                 exist = True
                 break
         if not exist:
-            config.client_list.append({'ip': client_data['ip'], 'data': client_data['data']})
+            config.log(f"New client connected: {client_data['ip']}")
+            Server.client_connections.append(requests)
         return jsonify({'status': 'success'})
-
-    @app.route('/send', methods=['POST'])
     def send_message():
         """
-        Sends a message to the server
-        :param message: Message to send to the server (str)
+        Sends a message to the client
+        :param message: Message to send to the client (str)
         """
-        global SERVER_ADDRESS  # Access the global variable
         message = request.json['message']
-        url = f"{SERVER_ADDRESS}/send"
-        data = {"message": message}
-        response = requests.post(url, json=data)
-        if response.status_code != 200:
-            print(f"Failed to send message: {response.text}")
+        compressed_message = compress(message.encode())
+        response = requests.post('http://localhost:8000/receive', data=compressed_message)
         return jsonify({'status': 'success'})
 
-    @app.route('/receive', methods=['GET'])
+    @app.route('/receive', methods=['POST'])
     def receive_message():
-        """
-        Receives a message from the server
-        :return: Message received from the server (str)
-        """
-        global SERVER_ADDRESS  # Access the global variable
-        url = f"{SERVER_ADDRESS}/receive"
-        response = requests.get(url)
-        if response.status_code != 200:
-            print(f"Failed to receive message: {response.text}")
-            return jsonify({'status': 'failed'})
-        return jsonify({'message': response.json()["message"]})
-
+        if request.method == 'POST':
+            message = request.json['message']
+            print(f"Received message: {message}")
+            # Process the message here
+            return jsonify({'message': 'Message received'})
+        else:
+            return jsonify({'error': 'Method not allowed'}), 405
 @main_requires_admin
 def main():
     global SERVER_ADDRESS  # Access the global variable
@@ -96,8 +90,12 @@ def main():
                 config.log(str(e))
                 config.log('Inputted port number is invalid. Starting on default port')
 
+    # Start the GUI in a separate thread
+    gui_thread = Thread(target=start_gui, daemon=True)
+    gui_thread.start()
+
+    # Start the server
     try:
-        # Start server
         # Step 0: Save the default path
         default_path = os.getcwd()
         print(default_path)
@@ -114,9 +112,8 @@ def main():
         config.log(f'Server is now publicly accessible at {public_url}')
         SERVER_ADDRESS = public_url  # Set the server address to the ngrok URL
         server = Server()
-        server.server = app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
-        Thread(target=server.client_connections, daemon=True).start()  # Thread to accept new connections
-        start_gui()  # Start the GUI
+        server.server_socket = app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
+        Thread(target=server.accept_connections, daemon=True).start()  # Thread to accept new connections
     except requests.exceptions.RequestException as e:
         config.log(str(e))
         config.log('Invalid IP address to host server on.')

