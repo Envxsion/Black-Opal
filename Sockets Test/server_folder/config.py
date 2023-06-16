@@ -57,13 +57,4 @@ def delete_client(target):
             targets.pop(i)  # Delete dead client from targets list
 
 
-def log(message):
-    """
-    Logs a message to a log file in ./server_folder/logs
-    :param message: Message to log
-    """
-    file_path = '.\logs\oSys-{}.log'.format(datetime.now().strftime('%d.%m.%Y'))
-    makedirs(path.dirname(file_path), exist_ok=True)
-    with open(file_path, 'a+') as f:
-        f.write(datetime.now().strftime('[%d/%m/%Y %H:%M:%S]: ') + message + '\n')
-        print('--------------------\n', message)
+
