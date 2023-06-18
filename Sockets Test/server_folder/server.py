@@ -11,6 +11,7 @@ from pyuac import main_requires_admin
 from flask import Flask, request, jsonify
 from datetime import datetime
 from os import makedirs, path
+import config
 
 app = Flask(__name__)
 
@@ -29,8 +30,6 @@ class Server:
             self.client_connections.append(client)
 
 
-    import datetime
-
     @app.route('/new_client', methods=['POST'])
     def new_client():
         """
@@ -39,14 +38,14 @@ class Server:
         client_data = request.json
         exist = False
         for client in Server.client_connections:
-            if client.getpeername()[0] == client_data['ip']:
+            if client.fileno() not in [c.fileno() for c in Server.client_connections]:
                 exist = True
                 break
         if not exist:
             log(f"New client connected: {client_data['ip']}. Request content: {request.get_data()}")
             Server.client_connections.append(requests)
             with open('client_data.txt', 'a') as f:
-                f.write(f"{datetime.datetime.now()}: {client_data}\n")
+                f.write(f"{datetime.now()}: {client_data}\n")
         return jsonify({'status': 'success'})
 
 
@@ -75,7 +74,7 @@ class Server:
             message = request.data.decode()
             log(f"Received message: {message}")
             # Process the message here
-            return jsonify({'message': 'Message received: ' + str(message)})
+            return jsonify({'message': 'test1233'})
         else:
             return jsonify({'error': 'Method not allowed'}), 405
     
@@ -85,7 +84,7 @@ class Server:
             message = request.data.decode()
             log(f"Received message: {message}")
             # Process the message here
-            return jsonify({'message': 'Message received'} + str(message))
+            return jsonify({'message': 'test1233'})
         else:
             return jsonify({'error': 'Method not allowed'}), 405
 

